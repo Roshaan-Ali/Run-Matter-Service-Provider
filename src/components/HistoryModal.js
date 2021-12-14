@@ -115,7 +115,7 @@ export default HistoryModal;
 const styles = StyleSheet.create({
   rowView: {
     flexDirection: 'row',
-    alignItem: 'center',
+    alignItems: 'center',
     justifyContent: 'space-between',
   },
   container: {

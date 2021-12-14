@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 import Header from '../components/Header';
-
+import * as actions from '../store/Actions/index';
 import Heading from '../components/Heading';
 import IconComp from '../components/IconComp';
 import colors from '../assets/colors';
@@ -19,19 +19,25 @@ import Inputbox from '../components/Inputbox';
 // test
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import DisplayNameChangeModal from '../components/DisplayNameChangeModal';
+import {connect} from 'react-redux';
 
 const {width, height} = Dimensions.get('window');
 
-const Profile = props => {
+const Profile = ({navigation, UserReducer, updateUserData}) => {
   // image state
-  const [image, setImage] = useState(null);
+  const [userImage, setUserImage] = useState(null);
+  const [image, setImage] = useState(UserReducer?.userData?.photo);
   // display name state
-  const [displayName, setDisplayName] = useState('Michael Reimer');
+  const [displayName, setDisplayName] = useState(
+    UserReducer?.userData?.displayName,
+  );
   // modal state
   const [isModalVisible, setIsModalVisible] = useState(false);
-
-  var matches = displayName?.match(/\b(\w)/g);
-  var acronym = matches?.join('');
+  const [newpass, setNewpass] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [cnfrmpass, setCnfrmpass] = useState('');
+  // var matches = displayName?.match(/\b(\w)/g);
+  // var acronym = matches?.join('');
 
   // Change Display Name
   const _onPressEditName = () => {
@@ -40,7 +46,6 @@ const Profile = props => {
 
   // Upload Photo
   const uploadPhoto = async () => {
-    console.log('Upload photo');
     var options = {
       title: 'Select Image',
       allowsEditing: true,
@@ -56,7 +61,6 @@ const Profile = props => {
     };
 
     launchImageLibrary(options, response => {
-      console.log('Response = ', response);
       // var ArraySingleImage = []
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -66,16 +70,27 @@ const Profile = props => {
         console.log('User tapped custom button: ', response.customButton);
         // SelectMultipleImage()
       } else {
-        // const source = {
-        // for showing image
-        //   uri: 'data:image/jpeg;base64,' + response.data
-        // };
-        setImage(response);
-        // console.log(source)
-        // ArraySingleImage.push(source)
-        console.log(response.assets);
+        setUserImage(response);
       }
     });
+  };
+
+  const _onPressSave = async () => {
+    setLoading(true);
+    let userData = {
+      photo: userImage
+        ? `data:${userImage.assets[0].type};base64,${userImage.assets[0].base64}`
+        : image,
+      displayName: displayName,
+    };
+    await updateUserData(userData);
+    // setTimeout(() => {
+    //   alert('Changes Saved!');
+    //   setLoading(false);
+    // }, [5000]);
+    alert('Changes Saved!');
+    setLoading(false);
+    // console.log(userData);
   };
 
   return (
@@ -83,7 +98,7 @@ const Profile = props => {
       {/* Header  */}
       <Header
         showBack={true}
-        navigation={props.navigation}
+        navigation={navigation}
         iconName="arrow-back"
         iconSize={25}
       />
@@ -98,18 +113,19 @@ const Profile = props => {
 
         {/* Image Container  */}
         <View style={styles.boxContainer}>
-          {image ? (
+          {image || userImage ? (
             <Image
               source={{
-                uri: `data:${image.assets[0].type};base64,${image.assets[0].base64}`,
+                uri: userImage
+                  ? `data:${userImage.assets[0].type};base64,${userImage.assets[0].base64}`
+                  : image,
               }}
               style={[StyleSheet.absoluteFill, {borderRadius: 100}]}
-              // style={styles.imageStyle}
             />
           ) : (
             <Heading
               passedStyle={styles.usernameWordsStyle}
-              title={acronym}
+              title={displayName?.match(/\b(\w)/g)?.join('')}
               fontType="bold"
             />
           )}
@@ -127,6 +143,9 @@ const Profile = props => {
         {/* Username Container  & Password */}
         <View style={styles.usernameViewStyle}>
           <Heading
+            // var matches = displayName?.match(/\b(\w)/g);
+            // var acronym = matches?.join('');
+
             title={displayName}
             passedStyle={styles.usernameStyle}
             fontType="medium"
@@ -142,21 +161,29 @@ const Profile = props => {
           </TouchableOpacity>
         </View>
         <Inputbox
-          passedStyle={styles.border_line}
+          isSecure={true}
+          viewStyle={styles.border_line}
           placeholderTilte="Change Password"
-          placeholderTextColor="rgba(0,0,0,0.7)"
+          textInputStyle={{color: 'black'}}
+          placeHolderColor="rgba(0,0,0,0.7)"
+          value={cnfrmpass}
+          setTextValue={setCnfrmpass}
         />
         <Inputbox
-          passedStyle={styles.border_line}
+          isSecure={true}
+          viewStyle={styles.border_line}
           placeholderTilte="Confirm Password"
-          placeholderTextColor="rgba(0,0,0,0.7)"
+          placeHolderColor="rgba(0,0,0,0.7)"
+          value={newpass}
+          textInputStyle={{color: 'black'}}
+          setTextValue={setNewpass}
         />
         {/* Save Button  */}
         <View style={styles.btnContainer}>
           <Button
-            title="SAVE"
+            title={loading ? 'SAVING' : 'SAVE'}
             btnStyle={styles.btnStyle}
-            onBtnPress={() => pressed()}
+            onBtnPress={() => _onPressSave()}
             btnTextStyle={styles.btnTextColor}
             isBgColor={false}
           />
@@ -250,18 +277,19 @@ const styles = StyleSheet.create({
     padding: height * 0.01,
     borderRadius: width,
   },
-  iconTouchable:{
+  iconTouchable: {
     position: 'absolute',
     top: height * 0.2,
     right: width * 0.01,
     backgroundColor: 'blue',
-    borderRadius:width
+    borderRadius: width,
   },
   border_line: {
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0,0,0,0.12)',
-    width: width * 0.95,
+    width: width * 0.9,
     fontFamily: 'Montserrat-Regular',
+    alignSelf: 'center',
   },
   imageStyle: {
     width: width * 0.5,
@@ -275,4 +303,8 @@ const styles = StyleSheet.create({
     marginVertical: height * 0.03,
   },
 });
-export default Profile;
+
+const mapStateToProps = state => {
+  return {UserReducer: state.UserReducer};
+};
+export default connect(mapStateToProps, actions)(Profile);

@@ -195,8 +195,8 @@ const styles = StyleSheet.create({
 
   image: {
     justifyContent: 'center',
-    width: '100%',
-    height: '100%',
+    width: width,
+    height: height,
     alignSelf: 'center',
     alignItems: 'center',
   },

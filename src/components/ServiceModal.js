@@ -8,35 +8,51 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import colors from '../assets/colors';
-import Heading from '../components/Heading';
-import Inputbox from '../components/Inputbox';
-import Button from '../components/Button';
+import Heading from './Heading';
+import Inputbox from './Inputbox';
+import Button from './Button';
 import IconComp from './IconComp';
 
 const {width, height} = Dimensions.get('window');
 
-const ServiceNameChangeModal = ({
+const ServiceModal = ({
+  isUpdating,
   serviceName,
   setServiceName,
   servicePrice,
   setServicePrice,
   isModalVisible,
   setIsModalVisible,
+  setShowDropDownModal,
+  _onPressAddNewService,
+  _onPressUpdateService,
+  _onPressDeleteService,
 }) => {
   const [sName, setSName] = useState(serviceName);
   const [sPrice, setSPrice] = useState(servicePrice);
+
+  const _onPressSelectService = () => {
+    setIsModalVisible(false);
+    setShowDropDownModal(true);
+  };
+
+  // const _onPressCancel = () => {
+  //   setServicePrice('');
+  //   setServiceName('');
+  // };
   return (
     <Modal
       isVisible={isModalVisible}
-      swipeDirection={['up']}
-      onSwipeMove={p => setIsModalVisible(false)}>
+      onModalShow={() => {
+        // console.log(serviceName, servicePrice);
+      }}>
       <View style={styles.container}>
         <TouchableOpacity
           style={styles.crossStyle}
           activeOpacity={0.8}
           onPress={() => {
-            setSName('');
-            setSPrice('');
+            setServiceName('');
+            setServicePrice('');
             setIsModalVisible(false);
           }}>
           <IconComp
@@ -47,24 +63,29 @@ const ServiceNameChangeModal = ({
         </TouchableOpacity>
         <Heading
           passedStyle={styles.label}
-          title="Service Name"
+          title={isUpdating ? 'Update Service' : 'New Service'}
           fontType="extra-bold"
         />
-        <Inputbox
-          value={sName}
-          setTextValue={setSName}
-          viewStyle={{
-            borderBottomWidth: 1,
-            borderBottomColor: 'rgba(0,0,0,0.08)',
-          }}
-          passedStyle={styles.inputStyle}
-          placeHolderColor="grey"
-          placeholderTilte="Service Name"
-        />
 
+        {/* Service Name  */}
+        <TouchableOpacity
+          onPress={() => _onPressSelectService()}
+          activeOpacity={0.8}>
+          <Heading
+            title={serviceName ? serviceName : 'Service Name'}
+            passedStyle={[
+              styles.serviceName,
+              serviceName ? {color: 'black'} : {color: 'rgba(0,0,0,0.6)'},
+            ]}
+            // passedStyle={styles.serviceName}
+          />
+        </TouchableOpacity>
+
+        {/* Service Price  */}
         <Inputbox
-          value={sPrice}
-          setTextValue={setSPrice}
+          value={servicePrice}
+          keyboardType={'decimal-pad'}
+          setTextValue={setServicePrice}
           passedStyle={styles.inputStyle}
           placeHolderColor="grey"
           viewStyle={{
@@ -77,25 +98,46 @@ const ServiceNameChangeModal = ({
         {/* Buttons Container  */}
         <View style={styles.flexRow}>
           <Button
-            title="ADD NEW SERVICES"
+            title={isUpdating ? 'UPDATE SERVICE' : 'ADD NEW SERVICES'}
             onBtnPress={() => {
-              setServiceName(sName);
-              setServicePrice(sPrice);
-              setIsModalVisible(false);
+              isUpdating ? _onPressUpdateService() : _onPressAddNewService();
             }}
             isBgColor={false}
             btnStyle={styles.btnStyle}
             btnTextStyle={styles.btnTextStyle}
           />
         </View>
+        {/* Buttons Container  */}
+        {isUpdating && (
+          <View style={[styles.flexRow, {marginTop: height * 0.02}]}>
+            <Button
+              title={'DELETE SERVICE'}
+              onBtnPress={() => {
+                isUpdating && _onPressDeleteService();
+              }}
+              isBgColor={false}
+              btnStyle={styles.btnStyle}
+              btnTextStyle={styles.btnTextStyle}
+            />
+          </View>
+        )}
       </View>
     </Modal>
   );
 };
 
-export default ServiceNameChangeModal;
+export default ServiceModal;
 
 const styles = StyleSheet.create({
+  serviceName: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0,0,0,0.12)',
+    width: width * 0.7,
+    alignSelf: 'center',
+    fontSize: width * 0.04,
+    paddingVertical: height * 0.02,
+    borderRadius: 0,
+  },
   crossStyle: {
     position: 'absolute',
     top: 10,
@@ -117,7 +159,8 @@ const styles = StyleSheet.create({
   inputStyle: {
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0,0,0,0.12)',
-    width: width * 0.8,
+    width: width * 0.7,
+    alignSelf: 'center',
     fontSize: width * 0.04,
     marginLeft: 0,
     paddingLeft: 0,

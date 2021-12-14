@@ -7,6 +7,7 @@ import {
   Dimensions,
   ScrollView,
   LogBox,
+  FlatList,
 } from 'react-native';
 import Heading from '../components/Heading';
 import userimg from '../assets/Images/user_image.png';
@@ -16,7 +17,9 @@ import wave from '../assets/Images/Wave.png';
 import _1K from '../assets/Images/1k.png';
 import STARS from '../assets/Images/stars.png';
 import IconComp from '../components/IconComp';
-import ServiceNameChangeModal from '../components/ServiceNameChangeModal';
+import {connect} from 'react-redux';
+import * as actions from '../store/Actions/index';
+import OngoingJobs from '../components/OngoingJobs';
 
 LogBox.ignoreLogs(['new NativeEventEmitter']);
 
@@ -49,24 +52,30 @@ const HomeOptionWithoutRightIcon = ({item, onPress}) => {
   );
 };
 
-function Home({navigation}) {
-  const [showServiceNameModal, setShowServiceNameModal] = useState(false);
+function Home({navigation, UserReducer}) {
   const [toggle, setToggle] = useState(true);
   const [options, setOptions] = useState(dummyOptions);
-  let name = 'Michael';
-  const [serviceName, setServiceName] = useState('');
-  const [servicePrice, setServicePrice] = useState('');
-
+  let name = UserReducer?.userData?.displayName.split(' ')[0];
+  let job = {
+    _id: 1,
+    name: 'Jason Brown',
+    type: 'mechanic',
+  };
   // Options Handler
   const _onPressOptions = item => {
-    navigation.navigate('Map');
+    // navigation.navigate('Map');
   };
 
+  const _onPressOngoingJobs = (item, index) => {
+    navigation.navigate('Map');
+  };
   return (
     <View style={styles.container}>
       {/* Header  */}
       <Header title="Menu" navigation={navigation} />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        nestedScrollEnabled={true}>
         {/* Username and Hi Wave  */}
         <View style={styles.nameAndWaveStyle}>
           <Image source={wave} style={styles.img_wave} resizeMode="contain" />
@@ -113,60 +122,108 @@ function Home({navigation}) {
         </View>
 
         {/* Ongoing Jobs  */}
-        <View style={styles.ongoingJobsView}>
+        <View style={[styles.ongoingJobsView]}>
           <Heading
-            title="Ongoing Jobs"
+            title="Ongoing Job"
             fontType="bold"
             passedStyle={styles.ongoingLabel}
           />
 
-          <TouchableOpacity
-            style={styles.popUpBoxContainer}
-            activeOpacity={0.8}
-            onPress={() =>
-              // navigation.navigate('RideCompleted')
-              setShowServiceNameModal(true)
-            }>
-            <View style={styles.rowView}>
-              <Image source={userimg} />
-              <View>
-                <Heading
-                  passedStyle={styles.popUpText}
-                  title={'Michael Reimer'}
-                  fontType="bold"
-                />
-                <Heading
-                  passedStyle={styles.textMechanic}
-                  title={'Mechanic'}
-                  fontType="medium"
-                />
+          {job ? (
+            <TouchableOpacity
+              style={styles.popUpBoxContainer}
+              activeOpacity={0.8}
+              onPress={() =>
+                // navigation.navigate('RideCompleted')
+                navigation.navigate('Map')
+              }>
+              <View style={styles.rowView}>
+                <Image source={userimg} />
+                <View>
+                  <Heading
+                    passedStyle={styles.popUpText}
+                    title={'Jason Brown'}
+                    fontType="bold"
+                  />
+                  <Heading
+                    passedStyle={styles.textMechanic}
+                    title={'Mechanic'}
+                    fontType="medium"
+                  />
+                </View>
               </View>
-            </View>
 
-            <IconComp
-              iconName="chevron-with-circle-right"
-              type={'Entypo'}
-              passedStyle={styles.icon_style}
+              <IconComp
+                iconName="chevron-with-circle-right"
+                type={'Entypo'}
+                passedStyle={styles.icon_style}
+              />
+            </TouchableOpacity>
+          ) : (
+            <View style={styles.noJobsView}>
+              <Image
+                resizeMode="contain"
+                source={require('../assets/Images/warn.png')}
+                style={styles.noJobImage}
+              />
+              <Heading
+                title="No job assigned yet."
+                passedStyle={styles.noJobTitle}
+              />
+            </View>
+          )}
+
+          {/* <FlatList
+          data={dummyJobs}
+          nestedScrollEnabled={true}
+          keyExtractor={item => item._id.toString()}
+          renderItem={({item, index}) => (
+            <OngoingJobs
+              item={item}
+              index={index}
+              onPress={_onPressOngoingJobs}
             />
-          </TouchableOpacity>
+          )}
+          ListHeaderComponent={() => (
+            <Heading
+              title="Ongoing Jobs"
+              fontType="bold"
+              passedStyle={styles.ongoingLabel}
+            />
+          )}
+          ListHeaderComponentStyle={{
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            alignSelf: 'center',
+            width: width * 0.85,
+            marginVertical: height * 0.01,
+          }}
+          contentContainerStyle={{
+            marginTop: height * 0.03,
+            alignItems: 'center',
+          }}
+        /> */}
         </View>
       </ScrollView>
-
-      {showServiceNameModal && (
-        <ServiceNameChangeModal
-          serviceName={serviceName}
-          setServiceName={setServiceName}
-          servicePrice={servicePrice}
-          setServicePrice={setServicePrice}
-          isModalVisible={showServiceNameModal}
-          setIsModalVisible={setShowServiceNameModal}
-        />
-      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  noJobsView: {
+    marginTop: height * 0.02,
+    // justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  noJobTitle: {
+    fontSize: width * 0.05,
+    marginLeft: width * 0.02,
+  },
+  noJobImage: {
+    width: width * 0.1,
+    height: height * 0.05,
+  },
   ongoingJobsView: {
     borderTopColor: 'rgba(0,0,0,0.08)',
     borderTopWidth: 1,
@@ -194,7 +251,6 @@ const styles = StyleSheet.create({
   },
   ongoingLabel: {
     fontSize: width * 0.05,
-    marginBottom: height * 0.03,
   },
   toggleOnStyle: {
     fontSize: width * 0.15,
@@ -353,7 +409,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+const mapStateToProps = ({UserReducer}) => {
+  return {UserReducer};
+};
+export default connect(mapStateToProps, actions)(Home);
 
 const dummyOptions = [
   {
@@ -388,5 +447,13 @@ const Options = [
     _id: 2,
     image: STARS,
     text: 'Ratings',
+  },
+];
+
+const dummyJobs = [
+  {
+    _id: 1,
+    name: 'Jason Brown',
+    type: 'mechanic',
   },
 ];

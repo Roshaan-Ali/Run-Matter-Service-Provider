@@ -24,7 +24,7 @@ const height = Dimensions.get('window').height;
 
 const SignUp = ({navigation}) => {
   // Sign Up States
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(1);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [phone_no, setPhone_no] = useState('');
@@ -110,243 +110,255 @@ const SignUp = ({navigation}) => {
   };
 
   return (
-    <View style={{ height:'100%', justifyContent:'center'}}>
-         <StatusBar animated={true} translucent backgroundColor="transparent" />
-          <ImageBackground
-            source={background_img}
-            resizeMode='cover'
-            style={{flex: 1}}>
-            <ScrollView scrollEnabled showsVerticalScrollIndicator={false} style={{marginHorizontal: 20, paddingVertical: 20}} >
-
+    <>
+      <View 
+      // style={{justifyContent: 'center'}}
+      >
+         <StatusBar translucent={false}   backgroundColor={colors.themeBlue} barStyle='light-content' />
+        <ImageBackground
+          source={background_img}
+          // resizeMode="cover"
+          style={{width: width, height: height}}>
      
-        
-        <View style={styles.outerView}>
-          <View style={styles.innerView}>
-            {step == 1 ? (
-              <View style={{justifyContent:'center', height: height - 100, alignItems: 'center', marginVertical: height* 0.05}}>
-                <Image resizeMode="contain" source={logo} style={styles.logo} />
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={styles.outerView}>
+              <View style={styles.innerView}>
+                {step == 1 ? (
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                      height: height - 100,
+                      alignItems: 'center',
+                      marginVertical: height * 0.05,
+                    }}>
+                    <Image
+                      resizeMode="contain"
+                      source={logo}
+                      style={styles.logo}
+                    />
 
-                <View style={styles.inputBoxes}>
-                  <Inputbox
-                    value={username}
-                    setTextValue={setUsername}
-                    placeholderTilte="Username"
-                    placeHolderColor="grey"
-                  />
-                  <Inputbox
-                    value={email}
-                    setTextValue={setEmail}
-                    placeholderTilte="Email"
-                    placeHolderColor="grey"
-                  />
-                  <Inputbox
-                    value={phone_no}
-                    setTextValue={setPhone_no}
-                    placeholderTilte="Phone #"
-                    keyboardType={'numeric'}
-                    placeHolderColor="grey"
-                  />
-                  <Inputbox
-                    value={password}
-                    setTextValue={setPassword}
-                    placeholderTilte="Password"
-                    isSecure={true}
-                    placeHolderColor="grey"
-                  />
-                  <Inputbox
-                    value={c_password}
-                    setTextValue={setC_Password}
-                    placeholderTilte="Confirm Password"
-                    isSecure={true}
-                    placeHolderColor="grey"
-                  />
-                </View>
+                    <View style={styles.inputBoxes}>
+                      <Inputbox
+                        value={username}
+                        setTextValue={setUsername}
+                        placeholderTilte="Username"
+                        placeHolderColor="grey"
+                      />
+                      <Inputbox
+                        value={email}
+                        setTextValue={setEmail}
+                        placeholderTilte="Email"
+                        placeHolderColor="grey"
+                      />
+                      <Inputbox
+                        value={phone_no}
+                        setTextValue={setPhone_no}
+                        placeholderTilte="Phone #"
+                        keyboardType={'numeric'}
+                        placeHolderColor="grey"
+                      />
+                      <Inputbox
+                        value={password}
+                        setTextValue={setPassword}
+                        placeholderTilte="Password"
+                        isSecure={true}
+                        placeHolderColor="grey"
+                      />
+                      <Inputbox
+                        value={c_password}
+                        setTextValue={setC_Password}
+                        placeholderTilte="Confirm Password"
+                        isSecure={true}
+                        placeHolderColor="grey"
+                      />
+                    </View>
 
-                <Button
-                  title="Next >"
-                  onBtnPress={() => _onPressNext()}
-                  isBgColor={false}
-                  btnStyle={styles.btnStyle}
-                  btnTextStyle={styles.btnTextStyle}
+                    <Button
+                      title="Next >"
+                      onBtnPress={() => _onPressNext()}
+                      isBgColor={false}
+                      btnStyle={styles.btnStyle}
+                      btnTextStyle={styles.btnTextStyle}
+                    />
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        marginBottom: 10,
+                        justifyContent: 'center',
+                      }}>
+                      <Heading
+                        title="Already have an account?"
+                        fontType="medium"
+                        passedStyle={styles.alreadyLabel}
+                      />
+                      <TouchableOpacity onPress={() => _onPresslogin()}>
+                        <Heading
+                          title="Login"
+                          fontType="bold"
+                          passedStyle={styles.loginLabel}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                ) : step == 2 ? (
+                  <View
+                    style={{justifyContent: 'center', height: height - 100}}>
+                    <Heading
+                      title="BANK CARD DETAILS"
+                      fontType="extra-bold"
+                      passedStyle={styles.heading}
+                    />
+
+                    <View style={styles.cardView}>
+                      <CardField
+                        postalCodeEnabled={true}
+                        placeholder={{
+                          number: '4242 4242 4242 4242',
+                        }}
+                        cardStyle={{
+                          color: '#000000',
+                          borderRadius: 30,
+                          fontSize: 14,
+                        }}
+                        style={{
+                          width: '90%',
+                          height: 50,
+
+                          marginVertical: 30,
+                        }}
+                        onCardChange={cardDetails => {
+                          setCardDetails(cardDetails);
+                          console.log('cardDetails', cardDetails);
+                        }}
+                        onFocus={focusedField => {
+                          console.log('focusField', focusedField);
+                        }}
+                      />
+                    </View>
+                    <Button
+                      title="Next"
+                      onBtnPress={() => _onPressNext()}
+                      isBgColor={false}
+                      btnStyle={styles.btnStyle}
+                      btnTextStyle={styles.btnTextStyle}
+                    />
+                    {/* </ImageBackground> */}
+                  </View>
+                ) : (
+                  <View
+                    style={{justifyContent: 'center', height: height - 100}}>
+                    <Heading
+                      title="DOCUMENT DETAILS"
+                      passedStyle={styles.heading}
+                      fontType="extra-bold"
+                    />
+                    <View style={styles.inputBoxes}>
+                      <View style={styles.rowView}>
+                        <Inputbox
+                          isEditable={false}
+                          value={drivingLicense[0]?.name}
+                          setTextValue={setDrivingLicense}
+                          placeholderTilte="Driving License"
+                          placeHolderColor="grey"
+                          viewStyle={{width: width * 0.52}}
+                          textInputStyle={{width: width * 0.52}}
+                        />
+
+                        <TouchableOpacity
+                          style={styles.rowUpperView}
+                          activeOpacity={0.8}
+                          onPress={() => _onPressUploadLicense()}>
+                          <IconComp
+                            type="Feather"
+                            iconName="upload"
+                            passedStyle={styles.iconUploadStyle}
+                          />
+                          <Heading
+                            title="Upload"
+                            fontType="semi-bold"
+                            passedStyle={styles.uploadText}
+                          />
+                        </TouchableOpacity>
+                      </View>
+
+                      <View style={styles.rowView}>
+                        <Inputbox
+                          isEditable={false}
+                          value={proofOfInsurance[0]?.name}
+                          setTextValue={setProofOfInsurance}
+                          placeholderTilte="Proof of insurance"
+                          placeHolderColor="grey"
+                          viewStyle={{width: width * 0.52}}
+                          textInputStyle={{width: width * 0.52}}
+                        />
+
+                        <TouchableOpacity
+                          style={styles.rowUpperView}
+                          activeOpacity={0.8}
+                          onPress={() => _onPressUploadInsurance()}>
+                          <IconComp
+                            type="Feather"
+                            iconName="upload"
+                            passedStyle={styles.iconUploadStyle}
+                          />
+                          <Heading
+                            title="Upload"
+                            fontType="semi-bold"
+                            passedStyle={styles.uploadText}
+                          />
+                        </TouchableOpacity>
+                      </View>
+
+                      <Inputbox
+                        value={dotNum}
+                        setTextValue={setDotNum}
+                        placeholderTilte="DOT number"
+                        keyboardType={'numeric'}
+                        placeHolderColor="grey"
+                      />
+                      <Inputbox
+                        value={taxNum}
+                        setTextValue={setTaxNum}
+                        placeholderTilte="EIN number/Tax number"
+                        placeHolderColor="grey"
+                      />
+                    </View>
+                    <Button
+                      title="Sign Up"
+                      onBtnPress={() => _onPressNext()}
+                      isBgColor={false}
+                      btnStyle={styles.btnStyle}
+                      btnTextStyle={styles.btnTextStyle}
+                    />
+                  </View>
+                )}
+              </View>
+
+              <View style={styles.circlesView}>
+                <View
+                  style={[
+                    styles.circleGrey,
+                    step === 1 && {backgroundColor: colors.themeBlue},
+                  ]}
                 />
                 <View
-                  style={{
-                    flexDirection: 'row',
-                    marginBottom: 10,
-                    justifyContent: 'center',
-                  }}>
-                  <Heading
-                    title="Already have an Account?"
-                    fontType="medium"
-                    passedStyle={styles.alreadyLabel}
-                  />
-                  <TouchableOpacity onPress={() => _onPresslogin()}>
-                    <Heading
-                      title="Login"
-                      fontType="bold"
-                      passedStyle={styles.loginLabel}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            ) : step == 2 ? (
-              <View style={{justifyContent:'center', height: height - 100}}>
-                <Heading
-                  title="BANK CARD DETAILS"
-                  fontType="extra-bold"
-                  passedStyle={styles.heading}
+                  style={[
+                    styles.circleGrey,
+                    step === 2 && {backgroundColor: colors.themeBlue},
+                  ]}
                 />
-
-                <View style={styles.cardView}>
-                  <CardField
-                    postalCodeEnabled={true}
-                    placeholder={{
-                      number: '4242 4242 4242 4242',
-                    }}
-                    cardStyle={{
-                      textColor: '#000000',
-                      borderRadius: 30,
-                      fontSize: 14,
-                    }}
-                    style={{
-                      width: '90%',
-                      height: 50,
-
-                      marginVertical: 30,
-                    }}
-                    onCardChange={cardDetails => {
-                      setCardDetails(cardDetails);
-                      console.log('cardDetails', cardDetails);
-                    }}
-                    onFocus={focusedField => {
-                      console.log('focusField', focusedField);
-                    }}
-                  />
-                </View>
-                <Button
-                  title="Next"
-                  onBtnPress={() => _onPressNext()}
-                  isBgColor={false}
-                  btnStyle={styles.btnStyle}
-                  btnTextStyle={styles.btnTextStyle}
-                />
-                {/* </ImageBackground> */}
-              </View>
-            ) : (
-              <View style={{justifyContent:'center', height: height-100}}>
-                <Heading
-                  title="DOCUMENT DETAILS"
-                  passedStyle={styles.heading}
-                  fontType="extra-bold"
-                />
-                <View style={styles.inputBoxes}>
-                  <View style={styles.rowView}>
-                    <Inputbox
-                      isEditable={false}
-                      value={drivingLicense[0]?.name}
-                      setTextValue={setDrivingLicense}
-                      placeholderTilte="Driving License"
-                      placeHolderColor="grey"
-                      viewStyle={{width: width * 0.52}}
-                      textInputStyle={{width: width * 0.52}}
-                    />
-
-                    <TouchableOpacity
-                      style={styles.rowUpperView}
-                      activeOpacity={0.8}
-                      onPress={() => _onPressUploadLicense()}>
-                      <IconComp
-                        type="Feather"
-                        iconName="upload"
-                        passedStyle={styles.iconUploadStyle}
-                      />
-                      <Heading
-                        title="Upload"
-                        fontType="semi-bold"
-                        passedStyle={styles.uploadText}
-                      />
-                    </TouchableOpacity>
-                  </View>
-
-                  <View style={styles.rowView}>
-                    <Inputbox
-                      isEditable={false}
-                      value={proofOfInsurance[0]?.name}
-                      setTextValue={setProofOfInsurance}
-                      placeholderTilte="Proof of insurance"
-                      placeHolderColor="grey"
-                      viewStyle={{width: width * 0.52}}
-                      textInputStyle={{width: width * 0.52}}
-                    />
-
-                    <TouchableOpacity
-                      style={styles.rowUpperView}
-                      activeOpacity={0.8}
-                      onPress={() => _onPressUploadInsurance()}>
-                      <IconComp
-                        type="Feather"
-                        iconName="upload"
-                        passedStyle={styles.iconUploadStyle}
-                      />
-                      <Heading
-                        title="Upload"
-                        fontType="semi-bold"
-                        passedStyle={styles.uploadText}
-                      />
-                    </TouchableOpacity>
-                  </View>
-
-                  <Inputbox
-                    value={dotNum}
-                    setTextValue={setDotNum}
-                    placeholderTilte="DOT number"
-                    keyboardType={'numeric'}
-                    placeHolderColor="grey"
-                  />
-                  <Inputbox
-                    value={taxNum}
-                    setTextValue={setTaxNum}
-                    placeholderTilte="EIN number/Tax number"
-                    placeHolderColor="grey"
-                  />
-                </View>
-                <Button
-                  title="Sign Up"
-                  onBtnPress={() => _onPressNext()}
-                  isBgColor={false}
-                  btnStyle={styles.btnStyle}
-                  btnTextStyle={styles.btnTextStyle}
+                <View
+                  style={[
+                    styles.circleGrey,
+                    step === 3 && {backgroundColor: colors.themeBlue},
+                  ]}
                 />
               </View>
-            )}
-          </View>
-
-          <View style={styles.circlesView}>
-            <View
-              style={[
-                styles.circleGrey,
-                step === 1 && {backgroundColor: colors.themeBlue},
-              ]}
-            />
-            <View
-              style={[
-                styles.circleGrey,
-                step === 2 && {backgroundColor: colors.themeBlue},
-              ]}
-            />
-            <View
-              style={[
-                styles.circleGrey,
-                step === 3 && {backgroundColor: colors.themeBlue},
-              ]}
-            />
-          </View>
-        </View>
-   
-
-    </ScrollView>
-    </ImageBackground>
-    </View>
+            </View>
+          </ScrollView>
+        </ImageBackground>
+      </View>
+    </>
   );
 };
 
@@ -375,7 +387,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     // paddingTop: 10,
-    height: 100
+    height: 100,
     // position:'absolute', bottom: 0, left: 0, right: 0
   },
   cardCustomStyle: {
@@ -384,7 +396,7 @@ const styles = StyleSheet.create({
     marginVertical: 30,
   },
   cardStyle: {
-    textColor: '#000000',
+    color: '#000000',
     borderRadius: 30,
     fontSize: 14,
   },

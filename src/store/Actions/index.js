@@ -24,6 +24,19 @@ export const user_logout = () => async dispatch => {
   }
 };
 
+export const updateUserData = userData => async dispatch => {
+  console.log(userData.displayName,"----ACtions")
+  try {
+    dispatch({
+      type: types.UPDATE_USER_DATA,
+      payload: {
+        userData: userData,
+      },
+    });
+  } catch (error) {
+    console.log('Failed to update data.');
+  }
+};
 // export const userLoggedIn = (email, password) => async dispatch => {
 //   dispatch({
 //     type: types.USER_LOGIN,

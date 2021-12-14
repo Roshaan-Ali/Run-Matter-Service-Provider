@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   StatusBar,
-  Animated,
   Dimensions,
   Text,
   Image,
@@ -19,11 +18,11 @@ import * as actions from './store/Actions/index';
 
 const {width, height} = Dimensions.get('window');
 
-const CustomButton = ({onPress, label, style,  currentScreenName}) => {
+const CustomButton = ({onPress, label, style, currentScreenName}) => {
   //   const thisRoute = useRoute();
   return (
     <TouchableOpacity
-    key={label.id}
+      key={label.id}
       onPress={onPress}
       style={[
         styles.btnContainer,
@@ -50,7 +49,7 @@ const CustomButton = ({onPress, label, style,  currentScreenName}) => {
   );
 };
 
-const CustomDrawer = ({navigation, routes,user_logout}) => {
+const CustomDrawer = ({navigation, routes, user_logout, UserReducer}) => {
   const isDrawerOpen = useDrawerStatus() === 'open';
   const history = navigation.getState().history;
   const currentScreenName = isDrawerOpen
@@ -75,12 +74,26 @@ const CustomDrawer = ({navigation, routes,user_logout}) => {
             marginLeft: width * 0.04,
           },
         ]}>
-        <Image
-          source={require('./assets/Images/user.png')}
-          style={styles.userImage}
-        />
+        {UserReducer?.userData?.photo ? (
+          <Image
+            // resizeMode="contain"
+            source={{
+              uri: UserReducer?.userData?.photo,
+            }}
+            style={styles.userImage}
+          />
+        ) : (
+          <Image
+            resizeMode="contain"
+            source={require('./assets/Images/user.png')}
+            style={styles.userImage}
+          />
+        )}
         <View style={{paddingLeft: width * 0.03}}>
-          <Heading title="Minhal Nadeem" passedStyle={styles.usernameText} />
+          <Heading
+            title={UserReducer?.userData?.displayName}
+            passedStyle={styles.usernameText}
+          />
           {/* <View
             style={[
               styles.rowView,
@@ -105,7 +118,7 @@ const CustomDrawer = ({navigation, routes,user_logout}) => {
             {routes.map((route, index) => {
               return (
                 <CustomButton
-                key={index}
+                  key={index}
                   label={route}
                   onPress={() => {
                     // console.log(route.routeName, currentScreenName);
@@ -134,7 +147,7 @@ const CustomDrawer = ({navigation, routes,user_logout}) => {
             <CustomButton
               label={Logout}
               onPress={() => {
-                user_logout()
+                user_logout();
               }}
               currentScreenName={currentScreenName}
             />
@@ -150,7 +163,10 @@ const CustomDrawer = ({navigation, routes,user_logout}) => {
 //   return {UserReducer};
 // };
 
-export default connect(null, actions)(CustomDrawer);
+const mapStateToProps = ({UserReducer}) => {
+  return {UserReducer};
+};
+export default connect(mapStateToProps, actions)(CustomDrawer);
 
 const styles = StyleSheet.create({
   menuContainer: {
@@ -180,8 +196,9 @@ const styles = StyleSheet.create({
     paddingRight: width * 0.015,
   },
   userImage: {
-    width: width * 0.15,
+    width: width * 0.17,
     height: height * 0.1,
+    borderRadius: width * 0.09,
   },
   btnContainer: {
     flexDirection: 'row',
@@ -198,7 +215,7 @@ const styles = StyleSheet.create({
   btnText: {
     color: 'rgba(0,0,0,0.7)',
     fontSize: width * 0.045,
-    fontWeight:'400',
+    fontWeight: '400',
     textTransform: 'capitalize',
   },
 });

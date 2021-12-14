@@ -25,6 +25,12 @@ export default function MainAppScreens({navigation}) {
       routeName: 'home',
     },
     {
+      id: 1,
+      iconName: 'miscellaneous-services',
+      iconType: 'MaterialIcons',
+      routeName: 'my services',
+    },
+    {
       id: 2,
       iconName: 'history',
       iconType: 'MaterialIcons',
@@ -98,6 +104,7 @@ export default function MainAppScreens({navigation}) {
           );
         }}>
         <Drawer.Screen name="home" component={HomeScreensStack} />
+        <Drawer.Screen name="my services" component={AllServices} />
 
         <Drawer.Screen name="history" component={HistoryScreen} />
 

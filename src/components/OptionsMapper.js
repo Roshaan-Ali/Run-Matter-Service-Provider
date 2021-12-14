@@ -31,13 +31,13 @@ const OptionsMapper = ({item, index, onPress}) => {
       <View style={styles.texticonhandler}>
         <Heading
           passedStyle={styles.text}
-          title={item.text}
+          title={item.text.length > 12 ? `${item.text}...` : item.text}
           fontType="bold"
         />
-        {/* <IconComp
+        <IconComp
           iconName="arrow-right-bold-circle"
           type="MaterialCommunityIcons"
-        /> */}
+        />
       </View>
     </TouchableOpacity>
   );
@@ -53,10 +53,10 @@ const styles = StyleSheet.create({
     fontSize: width * 0.04,
     textTransform: 'capitalize',
     color: '#000',
-    flex:1,
+    flex: 1,
     marginLeft: width * 0.02,
-    justifyContent:'center',
-    alignItems:'center'
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   imageStyle: {
     width: width * 0.32,

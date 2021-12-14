@@ -1,6 +1,6 @@
 import {NavigationContainer} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import { connect } from "react-redux";
+import {connect} from 'react-redux';
 import {StyleSheet, Text, View} from 'react-native';
 import AuthRootStackScreens from './AuthRootStackScreens';
 import MainAppScreens from './MainAppScreens';
@@ -9,15 +9,12 @@ const MainNavigator = ({UserReducer}) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log("use effect--------------------------------")
     if (UserReducer.isUserLogin) {
-      console.log(UserReducer,"--------------------------------")
-      setToken("123")
+      setToken('123');
+    } else {
+      setToken(null);
     }
-    else{
-      setToken(null)
-    }
-  }, [UserReducer])
+  }, [UserReducer]);
 
   if (loading) {
     return <Text>Loading</Text>;

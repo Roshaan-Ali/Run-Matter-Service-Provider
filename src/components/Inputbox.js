@@ -95,7 +95,6 @@ const TextInputComp = ({
   textInputStyle,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
-  console.log({isEditable})
   return (
     <View style={[styles.inputContainer, viewStyle && viewStyle]}>
       <>
@@ -109,7 +108,7 @@ const TextInputComp = ({
           ]}
           onChangeText={val => setTextValue(val)}
           value={value}
-          editable={isEditable}
+          editable={isEditable || true}
           placeholder={placeholderTilte}
           placeholderTextColor={placeHolderColor ?? '#ffffff'}
           // inlineImageLeft={require('../assets/Images/user_image.png')}

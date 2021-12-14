@@ -24,7 +24,7 @@ const DisplayNameChangeModal = ({
   return (
     <Modal
       isVisible={isModalVisible}
-      swipeDirection={['up']}
+      swipeDirection={'up'}
       onSwipeMove={p => setIsModalVisible(false)}
       onBackButtonPress={p => setTimeout}>
       <View style={styles.container}>
@@ -32,7 +32,10 @@ const DisplayNameChangeModal = ({
         <Inputbox
           value={text}
           setTextValue={setText}
-          passedStyle={styles.inputStyle}
+          viewStyle={styles.inputStyle}
+          placeHolderColor={'rgba(0,0,0,0.3)'}
+          placeholderTilte={"Display Name"}
+          textInputStyle={{paddingLeft:0, paddingBottom:0,}}
         />
 
         {/* Buttons Container  */}
@@ -81,10 +84,9 @@ const styles = StyleSheet.create({
   inputStyle: {
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0,0,0,0.12)',
-    width: width * 0.8,
+    width: width * 0.75,
+    alignSelf:'center',
     fontSize:width* 0.04,
-    marginLeft: 0,
-    paddingLeft: 0,
     borderRadius: 0,
   },
   btnStyle: {
