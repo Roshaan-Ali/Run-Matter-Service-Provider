@@ -7,11 +7,14 @@ import {
 
 const INITIAL_STATE = {
   isUserLogin: false,
-  userData: null,
+  userData: {
+    displayName: 'Michael Reiner',
+  },
   accessToken: '',
 };
 
 export function UserReducer(state = INITIAL_STATE, action) {
+  console.log(action.payload);
   switch (action.type) {
     case USER_SIGNUP:
       return {
@@ -20,6 +23,7 @@ export function UserReducer(state = INITIAL_STATE, action) {
       };
     case USER_LOGIN:
       return {
+        ...state,
         ...action.payload,
       };
     case USER_LOGOUT:

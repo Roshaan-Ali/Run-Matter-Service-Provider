@@ -28,8 +28,13 @@ const LogIn = ({navigation, UserReducer, user_login}) => {
     if (email === '' || password === '') {
       alert('Both fields required');
     } else if (email === 'admin' || password === 'admin') {
-      console.log(UserReducer);
-      user_login({email, password}).then(() => {
+      user_login({
+        accessToken: '3FVoew7pgR4Gma2FGigh44Mdvose34vgdFV4fM7i7u61212',
+        userData: {
+          displayName: 'Michael Renier',
+        },
+        isUserLogin: true,
+      }).then(() => {
         console.log('work');
       });
     } else {

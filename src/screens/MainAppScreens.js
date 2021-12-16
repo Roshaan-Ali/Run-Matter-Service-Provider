@@ -11,6 +11,7 @@ import Map from './Map';
 import CustomDrawer from '../CustomDrawer';
 import Help from './Help';
 import HomeScreensStack from './HomeStackScreens';
+import messaging from '@react-native-firebase/messaging';
 
 const Drawer = createDrawerNavigator();
 
@@ -62,6 +63,20 @@ export default function MainAppScreens({navigation}) {
     },
   ];
 
+  async function requestUserPermission() {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
+  }
+
+  useEffect(() => {
+    requestUserPermission();
+  }, []);
   // const requestCameraPermission = async () => {
   //   try {
   //     const granted = await PermissionsAndroid.request(

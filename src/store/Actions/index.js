@@ -5,7 +5,7 @@ export const user_login = data => async dispatch => {
   try {
     dispatch({
       type: types.USER_LOGIN,
-      payload: {isUserLogin: true},
+      payload: data,
     });
   } catch (error) {
     console.log('Network Error');

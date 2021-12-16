@@ -15,6 +15,8 @@ import java.util.List;
 import com.facebook.react.bridge.JSIModulePackage;
 import com.swmansion.reanimated.ReanimatedJSIModulePackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;  // <--- Import Package
+
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
@@ -30,6 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
       new VectorIconsPackage();
       new MapsPackage();
       new SplashScreenReactPackage();
+      new ReactNativePushNotificationPackage();
       // Packages that cannot be autolinked yet can be added manually here, for example:
       // packages.add(new MyReactNativePackage());
       return packages;
