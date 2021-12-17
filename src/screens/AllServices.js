@@ -22,7 +22,7 @@ function AllServices(props) {
   const [options, setOptions] = useState(dummyOptions);
   const [services,setServices] = useState(dummyServices)
   const [serviceName, setServiceName] = useState('');
-  const [servicePrice, setServicePrice] = useState(0);
+  const [servicePrice, setServicePrice] = useState('');
   const [serviceId, setServiceId] = useState(null);
   const [showDropDownModal, setShowDropDownModal] = useState(false);
   const [showAddNewserviceModal, setShowAddNewserviceModal] = useState(false);
