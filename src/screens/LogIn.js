@@ -21,19 +21,19 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 const LogIn = ({navigation, UserReducer, user_login}) => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const _onPressLogIn = () => {
-    if (email === '' || password === '') {
+    if (username === '' || password === '') {
       alert('Both fields required');
-    } else if (email === 'admin' || password === 'admin') {
+    } else if (username === 'admin' || password === 'admin') {
       user_login({
-        accessToken: '3FVoew7pgR4Gma2FGigh44Mdvose34vgdFV4fM7i7u61212',
         userData: {
-          displayName: 'Michael Renier',
+          displayName: username === 'admin' ? 'Michael Reiner' : username,
         },
-        isUserLogin: true,
+        accessToken: 'TgvD65JmyrtprreASrrHBV64VB3v3B6apsh3gfNvf35jh7H',
+      
       }).then(() => {
         console.log('work');
       });
@@ -60,8 +60,8 @@ const LogIn = ({navigation, UserReducer, user_login}) => {
             <View style={styles.inputBoxes}>
               <Inputbox
                 viewStyle={{width: width * 0.8, height: height * 0.08}}
-                value={email}
-                setTextValue={setEmail}
+                value={username}
+                setTextValue={setUsername}
                 placeholderTilte="Username"
                 placeHolderColor="grey"
                 iconStyle={{color: 'grey', fontSize: width * 0.034}}

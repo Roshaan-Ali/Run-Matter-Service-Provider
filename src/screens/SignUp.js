@@ -70,7 +70,13 @@ const SignUp = ({navigation}) => {
       ) {
         alert('Please enter complete document details.');
       } else {
-        navigation.navigate('Otp');
+        navigation.navigate('Otp',{
+          username,
+          email,
+          phone_no,
+          password,
+          c_password,
+        });
       }
     }
   };

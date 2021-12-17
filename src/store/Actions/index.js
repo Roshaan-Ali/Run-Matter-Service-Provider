@@ -1,6 +1,17 @@
 import * as types from './actionType';
 
 // Auth Actions
+export const user_sign_up = data => async dispatch => {
+  try {
+    dispatch({
+      type: types.USER_SIGNUP,
+      payload: data,
+    });
+  } catch (error) {
+    console.log('Network Error');
+  }
+};
+
 export const user_login = data => async dispatch => {
   try {
     dispatch({

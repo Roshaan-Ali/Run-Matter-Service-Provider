@@ -55,7 +55,8 @@ const HomeOptionWithoutRightIcon = ({item, onPress}) => {
 function Home({navigation, UserReducer}) {
   const [toggle, setToggle] = useState(true);
   const [options, setOptions] = useState(dummyOptions);
-  let name = UserReducer?.userData?.displayName.split(' ')[0];
+  let name = UserReducer?.userData?.displayName?.split(' ')[0];
+  console.log({name})
   let job = {
     _id: 1,
     name: 'Jason Brown',
@@ -79,14 +80,30 @@ function Home({navigation, UserReducer}) {
         {/* Username and Hi Wave  */}
         <View style={styles.nameAndWaveStyle}>
           <Image source={wave} style={styles.img_wave} resizeMode="contain" />
-          <View style={styles.helloView}>
+          {/* <View style={styles.helloView}>
             <Heading title="Hello," fontType="bold" />
             <Heading
               title={name}
               passedStyle={styles.heading_username}
               fontType="bold-italic"
             />
-          </View>
+          </View> */}
+           <View
+              style={{
+                flexDirection: name?.length > 7 ? 'column' : 'row',
+                width: width * 0.8,
+              }}>
+              <Heading
+                title="Hello,"
+                passedStyle={styles.heading}
+                fontType="bold"
+              />
+              <Heading
+                title={name}
+                passedStyle={styles.heading_username}
+                fontType="bold-italic"
+              />
+            </View>
         </View>
 
         {/* Availability  */}

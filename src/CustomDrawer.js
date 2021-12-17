@@ -55,7 +55,10 @@ const CustomDrawer = ({navigation, routes, user_logout, UserReducer}) => {
   const currentScreenName = isDrawerOpen
     ? history[history?.length - 2].key.split('-')[0]
     : history[history?.length - 1].key.split('-')[0];
-
+    let name = UserReducer?.userData?.displayName;
+    // let name = 'Christopher Ridiculous';
+    let fname = name?.split(' ')[0];
+    let lname = name?.split(' ')[1];
   const Logout = {
     id: 10,
     iconName: 'logout',
@@ -85,29 +88,23 @@ const CustomDrawer = ({navigation, routes, user_logout, UserReducer}) => {
         ) : (
           <Image
             resizeMode="contain"
-            source={require('./assets/Images/user.png')}
+            source={require('./assets/user.png')}
             style={styles.userImage}
           />
         )}
         <View style={{paddingLeft: width * 0.03}}>
-          <Heading
-            title={UserReducer?.userData?.displayName}
-            passedStyle={styles.usernameText}
-          />
-          {/* <View
-            style={[
-              styles.rowView,
-              {
-                paddingTop: height * 0.01,
-              },
-            ]}>
-            <IconComp
-              iconName="circle"
-              type="FontAwesome"
-              passedStyle={styles.statusCircle}
-            />
-            <Heading title="Online" passedStyle={styles.userStatus} />
-          </View> */}
+          {/* Username  */}
+        <View style={{paddingLeft: width * 0.03}}>
+          {name?.length > 15 ? (
+            <View style={{justifyContent: 'center'}}>
+              <Heading title={fname} passedStyle={styles.usernameText} />
+              <Heading title={lname} passedStyle={styles.usernameText} />
+            </View>
+          ) : (
+            <Heading title={name} passedStyle={styles.usernameText} />
+          )}
+        </View>
+         
         </View>
       </View>
 

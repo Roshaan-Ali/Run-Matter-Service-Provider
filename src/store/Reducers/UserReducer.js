@@ -7,9 +7,7 @@ import {
 
 const INITIAL_STATE = {
   isUserLogin: false,
-  userData: {
-    displayName: 'Michael Reiner',
-  },
+  userData:null,
   accessToken: '',
 };
 
@@ -18,13 +16,21 @@ export function UserReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case USER_SIGNUP:
       return {
-        ...state,
-        ...action.payload,
+        // ...state,
+        userData: {
+          displayName: action.payload.userData.displayName,
+        },
+        accessToken: action.payload.accessToken,
+        isUserLogin: true,
       };
     case USER_LOGIN:
       return {
         ...state,
-        ...action.payload,
+        userData: {
+          displayName: action.payload.userData.displayName,
+        },
+        accessToken: action.payload.accessToken,
+        isUserLogin: true,
       };
     case USER_LOGOUT:
       return {
